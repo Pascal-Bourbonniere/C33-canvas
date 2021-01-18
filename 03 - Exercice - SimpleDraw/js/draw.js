@@ -1,37 +1,29 @@
-var ctx = null;
+let ctx = null;
 
-var mouseX = 0;
-var mouseY = 0;
-var spriteList = [];
+let mouseX = 0;
+let mouseY = 0;
+let spriteList = [];
 
-window.onload = function () {
-    ctx = document.getElementById("canvas").getContext("2d");
-    tick();
-    
-    document.getElementById("canvas").onmousemove = function (e) {
-        mouseX = e.pageX - document.getElementById("canvas").offsetLeft;
-        mouseY = e.pageY - document.getElementById("canvas").offsetTop;
+window.addEventListener('load', () => {
+    ctx = document.getElementById('canvas').getContext("2d")
+    spriteList.push(new Square(0,0,100))
+    document.getElementById('btn-add').onclick = () => {
+        const x = document.getElementById("x").value;
+        const y = document.getElementById("y").value;
+        const size = document.getElementById("size").value;
+
+        spriteList.push(new Square(x,y,size))
     }
-
-    document.getElementById("btn-add").onclick = function (e) {
-        spriteList.push(new Square(
-            document.getElementById("x").value,
-            document.getElementById("y").value,
-            document.getElementById("size").value
-        ));
-
-        document.getElementById("x").value = "";
-        document.getElementById("y").value = "";
-        document.getElementById("size").value = "";
+    canvas.onmousemove = e => {
+        mouseX = e.pageX - canvas.offsetLeft
+        mouseY = e.pageY - canvas.offsetTop
+        console.log("🚀 ~ file: draw.js ~ line 18 ~ window.addEventListener ~ mouseX", mouseX)
     }
-}
+	tick()
+})
 
-function tick() {
-    ctx.clearRect(0, 0, 600, 500);
-    
-    for (var i = 0; i < spriteList.length; i++) {
-        spriteList[i].tick();
-    }
-
-    window.requestAnimationFrame(tick);
+const tick = () => {
+    ctx.clearRect(0,0,650,500)
+    spriteList.forEach(s => s.tick())
+	window.requestAnimationFrame(tick);
 }
